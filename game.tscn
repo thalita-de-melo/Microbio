@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://x2b4n4tnp6oo"]
+[gd_scene load_steps=29 format=3 uid="uid://x2b4n4tnp6oo"]
 
 [ext_resource type="Texture2D" uid="uid://dhl83pjjblxbm" path="res://Assets/mystic_woods_2.1/sprites/characters/player.png" id="1_j1mc0"]
 [ext_resource type="Texture2D" uid="uid://7snko2vrqktk" path="res://Assets/mystic_woods_2.1/sprites/tilesets/grass.png" id="1_sq6mf"]
@@ -30,6 +30,30 @@ region = Rect2(192, 0, 48, 48)
 atlas = ExtResource("1_j1mc0")
 region = Rect2(240, 0, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_n33m7"]
+atlas = ExtResource("1_j1mc0")
+region = Rect2(0, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qatxx"]
+atlas = ExtResource("1_j1mc0")
+region = Rect2(48, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6vl4c"]
+atlas = ExtResource("1_j1mc0")
+region = Rect2(96, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_afwyj"]
+atlas = ExtResource("1_j1mc0")
+region = Rect2(144, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c2ubk"]
+atlas = ExtResource("1_j1mc0")
+region = Rect2(192, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4o5ob"]
+atlas = ExtResource("1_j1mc0")
+region = Rect2(240, 96, 48, 48)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_vp6cx"]
 animations = [{
 "frames": [{
@@ -55,11 +79,89 @@ animations = [{
 "name": &"idle",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n33m7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qatxx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6vl4c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_afwyj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c2ubk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4o5ob")
+}],
 "loop": true,
 "name": &"idle_up",
 "speed": 5.0
 }]
+
+[sub_resource type="Animation" id="Animation_fned4"]
+resource_name = "idle"
+length = 0.9
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_v32tj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_vjx0t"]
+resource_name = "idle_up"
+length = 1.1
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [12, 13, 14, 15, 16, 17]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_78isl"]
+_data = {
+"RESET": SubResource("Animation_v32tj"),
+"idle": SubResource("Animation_fned4"),
+"idle_up": SubResource("Animation_vjx0t")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vktwe"]
+radius = 6.0
+height = 20.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6c8js"]
 texture = ExtResource("1_sq6mf")
@@ -278,15 +380,27 @@ sources/9 = SubResource("TileSetAtlasSource_1kk7f")
 position = Vector2(-5, -2)
 
 [node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(23, 11)
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
+texture = ExtResource("1_j1mc0")
 hframes = 6
-vframes = 6
+vframes = 10
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
-position = Vector2(74, 105)
+visible = false
 sprite_frames = SubResource("SpriteFrames_vp6cx")
 animation = &"idle"
+frame_progress = 0.310406
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Player"]
+libraries = {
+"": SubResource("AnimationLibrary_78isl")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(0, 7)
+shape = SubResource("CapsuleShape2D_vktwe")
 
 [node name="TileMap" type="TileMap" parent="."]
 position = Vector2(-16, 168)
